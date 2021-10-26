@@ -60,7 +60,7 @@ create_status_badge <- function(status) {
       padding = "4px 14px",
       color = text_color
     )
-  )
+  ) %>% shiny::div()
 }
 
 create_character_table <- function(table_data) {
@@ -138,7 +138,10 @@ create_character_table <- function(table_data) {
         }
       )
     ),
-    pagination = FALSE
+    pagination = FALSE,
+    theme = reactable::reactableTheme(
+      cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
+    )
   )
 }
 
