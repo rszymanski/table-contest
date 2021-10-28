@@ -66,7 +66,7 @@ create_status_badge <- function(status) {
 create_character_table <- function(table_data) {
   reactable::reactable(
     data = table_data,
-    height = "80vh",
+    height = "70vh",
     defaultColDef = reactable::colDef(
       headerStyle = list(`text-transform` = "uppercase", color = "hsl(203, 15%, 47%)")
     ),
@@ -179,43 +179,30 @@ ui <- shiny::fluidPage(
     ")
   ),
   title = "Rick and Morty Characters Explorer",
-  shinyBS::bsCollapse(
-    id = "filters_panel", 
-    shinyBS::bsCollapsePanel(
-      title = shiny::tagList(shiny::icon("filter"), "Query Filters"),
-      shiny::fluidRow(
-        shiny::column(
-          width = 4,
-          shiny::textInput(inputId = "name_filter", label = "Name"),
-          shiny::selectInput(inputId = "status_filter", label = "Status", choices = c("", "alive", "dead", "unknown"))
-        ),
-        shiny::column(
-          width = 4,
-          shiny::textInput(inputId = "species_filter", label = "Species"),
-          shiny::textInput(inputId = "type_filter", label = "Type")
-        ),
-        shiny::column(
-          width = 4,
-          shiny::selectInput(inputId = "gender_filter", label = "gender", choices = c("", "female", "male", "genderless", "unknown"))
-        )
-      )
-    )
-  ),
   shiny::div(
-    style = "display: flex; justify-content: center",
+    style = "display: flex; flex-direction: column; align-items: center;",
     shiny::div(
-      class = "round-box",
-      style = "padding: 32px;",
+      style = "width: 984px; padding: 12px",
       shiny::div(
-        style = "display: flex; justify-content: flex-end; align-items: center",
-        shiny::textOutput("pages_text", inline = TRUE),
-        shiny::actionButton("goto_first_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-left")),
-        shiny::actionButton("prev_page", class = "pagination-control", label = "", icon = shiny::icon("angle-left")),
-        shiny::actionButton("next_page", class = "pagination-control", label = "", icon = shiny::icon("angle-right")),
-        shiny::actionButton("goto_last_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-right"))
+        style = "display: flex; justify-content: space-around",
+        shiny::textInput(inputId = "name_filter", label = "Name"),
+        shiny::selectInput(inputId = "gender_filter", label = "Gender", choices = c("", "female", "male", "genderless", "unknown")),
+        shiny::selectInput(inputId = "status_filter", label = "Status", choices = c("", "alive", "dead", "unknown"))
       ),
-      reactable::reactableOutput(outputId = "data_table", width = "900px", height = "80vh") %>% 
-        shinycssloaders::withSpinner(type = 8)
+      shiny::div(
+        class = "round-box",
+        style = "padding: 32px;",
+        shiny::div(
+          style = "display: flex; justify-content: flex-end; align-items: center",
+          shiny::textOutput("pages_text", inline = TRUE),
+          shiny::actionButton("goto_first_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-left")),
+          shiny::actionButton("prev_page", class = "pagination-control", label = "", icon = shiny::icon("angle-left")),
+          shiny::actionButton("next_page", class = "pagination-control", label = "", icon = shiny::icon("angle-right")),
+          shiny::actionButton("goto_last_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-right"))
+        ),
+        reactable::reactableOutput(outputId = "data_table", width = "900px", height = "70vh") %>%
+          shinycssloaders::withSpinner(type = 8)
+      )
     )
   )
 )
@@ -250,8 +237,6 @@ server <- function(input, output, session) {
     list(
       name = input$name_filter,
       status = input$status_filter,
-      species = input$species_filter,
-      type = input$type_filter,
       gender = input$gender_filter
     )
   })
