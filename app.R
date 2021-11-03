@@ -146,6 +146,7 @@ create_character_table <- function(table_data) {
 }
 
 ui <- shiny::fluidPage(
+  shinyjs::useShinyjs(),
   shiny::tags$head(
     shiny::tags$style("
       body { background-color: hsl(210, 0%, 88%) }
@@ -248,6 +249,19 @@ server <- function(input, output, session) {
   observeEvent(input$next_page, {
     current_page_number <- page_number()
     page_number(current_page_number + 1)
+  })
+  
+  observeEvent(page_number(), {
+    shiny::req(page_number())
+    shiny::req(total_pages())
+    
+    left_bound_condition <- page_number() > 1
+    shinyjs::toggleState(id = "prev_page", condition = left_bound_condition)
+    shinyjs::toggleState(id = "goto_first_page", condition = left_bound_condition)
+    
+    right_bound_condition <- page_number() < total_pages()
+    shinyjs::toggleState(id = "next_page", condition = right_bound_condition)
+    shinyjs::toggleState(id = "goto_last_page", condition = right_bound_condition)
   })
 
   filter_settings <- reactive({
