@@ -150,9 +150,29 @@ ui <- shiny::fluidPage(
     shiny::tags$style("
       body { background-color: hsl(210, 0%, 88%) }
       
+      .selectize-input {
+        border-radius: 16px;
+      }
+      
+      .selectize-input.input-active {
+        border-radius: 16px;
+      }
+      
+      .seclectize-dropdown {
+        border-radius: 16px;
+      }
+      
+      .selectize-dropdown-content {
+        border-radius: 16px;
+      }
+      
+      .form-control {
+        border-radius: 16px;
+      }
+      
       .round-box {
         background-color: white;
-        border-radius: 28px;
+        border-radius: 16px;
       }
       
       .pagination-control {
