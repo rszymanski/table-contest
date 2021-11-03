@@ -146,6 +146,7 @@ create_character_table <- function(table_data) {
 }
 
 ui <- shiny::fluidPage(
+  shinyjs::useShinyjs(),
   shiny::tags$head(
     shiny::tags$style("
       body { background-color: hsl(210, 0%, 88%) }
@@ -191,6 +192,19 @@ ui <- shiny::fluidPage(
         color: hsl(203, 15%, 47%);
       }
       
+      .placeholder-icon {
+        font-weight: 500;
+        color: hsl(203, 15%, 47%);
+        font-size: 150px;
+      }
+      
+      .placeholder-text {
+        font-weight: 700;
+        font-size: 18px;
+        padding-top: 12px;
+        color: hsl(203, 15%, 47%);
+      }
+      
       #pages_text {
         color: hsl(203, 15%, 47%);
         font-weight: 600;
@@ -211,17 +225,31 @@ ui <- shiny::fluidPage(
       ),
       shiny::div(
         class = "round-box",
-        style = "padding: 32px;",
-        shiny::div(
-          style = "display: flex; justify-content: flex-end; align-items: center",
-          shiny::textOutput("pages_text", inline = TRUE),
-          shiny::actionButton("goto_first_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-left")),
-          shiny::actionButton("prev_page", class = "pagination-control", label = "", icon = shiny::icon("angle-left")),
-          shiny::actionButton("next_page", class = "pagination-control", label = "", icon = shiny::icon("angle-right")),
-          shiny::actionButton("goto_last_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-right"))
+        style = "padding: 32px; height: calc(70vh + 64px + 35px)",
+        shinyjs::hidden(
+          shiny::div(
+            id = "table_placeholder",
+            style = "display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%",
+            shiny::icon("question-circle", class = "placeholder-icon"),
+            shiny::div(
+              "Oops, looks like there is no character matching your search criteria",
+              class = "placeholder-text"
+            )
+          )
         ),
-        reactable::reactableOutput(outputId = "data_table", width = "900px", height = "70vh") %>%
-          shinycssloaders::withSpinner(type = 8)
+        shiny::div(
+          id = "table_container",
+          shiny::div(
+            style = "display: flex; justify-content: flex-end; align-items: center",
+            shiny::textOutput("pages_text", inline = TRUE),
+            shiny::actionButton("goto_first_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-left")),
+            shiny::actionButton("prev_page", class = "pagination-control", label = "", icon = shiny::icon("angle-left")),
+            shiny::actionButton("next_page", class = "pagination-control", label = "", icon = shiny::icon("angle-right")),
+            shiny::actionButton("goto_last_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-right"))
+          ),
+          reactable::reactableOutput(outputId = "data_table", width = "900px", height = "70vh") %>%
+            shinycssloaders::withSpinner(8) 
+        )
       )
     )
   )
@@ -248,6 +276,27 @@ server <- function(input, output, session) {
   observeEvent(input$next_page, {
     current_page_number <- page_number()
     page_number(current_page_number + 1)
+  })
+  
+  observeEvent(page_number(), {
+    shiny::req(page_number())
+    shiny::req(total_pages())
+    
+    left_bound_condition <- page_number() > 1
+    shinyjs::toggleState(id = "prev_page", condition = left_bound_condition)
+    shinyjs::toggleState(id = "goto_first_page", condition = left_bound_condition)
+    
+    right_bound_condition <- page_number() < total_pages()
+    shinyjs::toggleState(id = "next_page", condition = right_bound_condition)
+    shinyjs::toggleState(id = "goto_last_page", condition = right_bound_condition)
+  })
+  
+  observeEvent(current_data(), {
+    shiny::req(current_data())
+    
+    should_table_be_showed <- nrow(current_data()$data) > 0
+    shinyjs::toggle(id = "table_placeholder", condition = !should_table_be_showed)
+    shinyjs::toggle(id = "table_container", condition = should_table_be_showed)
   })
 
   filter_settings <- reactive({
@@ -284,6 +333,7 @@ server <- function(input, output, session) {
 
   output$data_table <- reactable::renderReactable({
     shiny::req(current_data())
+    shiny::req(nrow(current_data()$data) > 0)
     
     create_character_table(
       table_data = current_data()$data
