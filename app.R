@@ -8,6 +8,8 @@ sass(
   output = "www/main.css"
 )
 
+CONFIG <- config::get()
+
 ui <- shiny::fluidPage(
   shinyjs::useShinyjs(),
   shiny::tags$head(
@@ -46,7 +48,7 @@ ui <- shiny::fluidPage(
 server <- function(input, output, session) {
   character_data_fetcher <- CharacterDataFetcherFactory$new(
     api_url = "https://rickandmortyapi.com/api/character"
-  )$create("paginated")
+  )$create(CONFIG$data_fetcher_type)
   
   page_number <- shiny::reactiveVal(1)
   

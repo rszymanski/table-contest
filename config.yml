@@ -1,0 +1,5 @@
+default:
+  data_fetcher_type: "paginated"
+  
+no_pagination:
+  data_fetcher_type: "in_memory"
