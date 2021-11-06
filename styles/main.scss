@@ -1,0 +1,207 @@
+// Colors
+$white: white;
+$secondary-gray: hsl(201, 23%, 34%);
+$tertiary-gray: hsl(203, 15%, 47%);
+$background-gray: hsl(210, 0%, 88%);
+
+$alive-color: hsl(116, 60%, 90%);
+$alive-text-color: hsl(116, 30%, 25%);
+
+$unknown-color: hsl(230, 70%, 90%);
+$unknown-text-color: hsl(230, 45%, 30%);
+
+$dead-color: hsl(350, 70%, 90%);
+$dead-text-color: hsl(350, 45%, 30%);
+
+$mars-icon-color: lightblue;
+$venus-icon-color: pink;
+$genderless-icon-color: gray;
+$question-icon-color: hsl(31, 100%, 70%);
+
+// Radiuses
+$default-radius: 16px;
+
+// Font sizes and weights
+$font-size-s: 12px;
+$font-size-m: 16px;
+$font-size-l: 18px;
+
+$weight-regular: 500;
+$weight-emphasized: 700;
+
+// Spacing
+$space-xs: 4px;
+$space-s: 8px;
+$space-m: 12px;
+$space-l: 18px;
+$space-xl: 24px;
+$space-xxl: 32px;
+
+// Sizing
+$character-image-size: 80px;
+
+body {
+  background-color: $background-gray;
+}
+
+.selectize-input {
+  border-radius: $default-radius;
+  
+  &.input-active {
+    border-radius: $default-radius;
+  }
+}
+
+.seclectize-dropdown {
+  border-radius: $default-radius;
+}
+
+.selectize-dropdown-content {
+  border-radius: $default-radius;
+}
+
+.form-control {
+  border-radius: $default-radius;
+}
+
+.round-box {
+  background-color: $white;
+  border-radius: $default-radius;
+  padding: $space-xxl;
+  height: calc(70vh + 64px + 35px);
+}
+
+.pagination-control {
+  border: 0px;
+  outline: 0px!important;
+  font-size: $font-size-l;
+  color: $tertiary-gray;
+  
+  &:active {
+    color: $tertiary-gray;
+  }
+  
+  &:focus {
+    background-color: transparent;
+    color: $tertiary-gray;
+  }
+}
+
+.placeholder-icon {
+  font-weight: $weight-regular;
+  color: $tertiary-gray;
+  font-size: 150px;
+}
+
+.placeholder-text {
+  font-weight: $weight-emphasized;
+  font-size: $font-size-l;
+  padding-top: $space-m;
+  color: $tertiary-gray;
+}
+
+#pages_text {
+  color: $tertiary-gray;
+  font-weight: $weight-emphasized;
+  margin-right: $space-xl;
+}
+
+%status-badge {
+  border-radius: $default-radius;
+  padding: $space-xs $space-m;
+}
+
+.status-badge-alive {
+  @extend %status-badge;
+  background-color: $alive-color;
+  color: $alive-text-color;
+}
+
+.status-badge-unknown {
+  @extend %status-badge;
+  background-color: $unknown-color;
+  color: $unknown-text-color;
+}
+  
+.status-badge-dead {
+  @extend %status-badge;
+  background-color: $dead-color;
+  color: $dead-text-color;
+}
+
+.character-image {
+  height: $character-image-size;
+  border-radius: 50%;
+}
+
+.character-image-column {
+  width: calc($character-image-size + $space-s);
+  max-width: calc($character-image-size + $space-s);
+}
+
+.character-table-header {
+  text-transform: uppercase;
+  color: $tertiary-gray;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-around
+}
+
+.table-placeholder {
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  height: 100%
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center 
+}
+
+.gender-cell-content {
+  font-size: $font-size-m;
+}
+
+%gender-cell-icon {
+  margin-right: $space-s;
+}
+
+.mars-icon { 
+  @extend %gender-cell-icon;
+  color: $mars-icon-color;
+}
+
+.venus-icon { 
+  @extend %gender-cell-icon;
+  color: $venus-icon-color;
+}
+
+.genderless-icon { 
+  @extend %gender-cell-icon;
+  color: $genderless-icon-color;
+}
+
+.question-icon { 
+  @extend %gender-cell-icon;
+  color: $question-icon-color;
+}
+
+.name-container {
+  font-weight: $weight-emphasized; 
+  font-size: $font-size-m;
+}
+
+.species-container {
+ color: $secondary-gray; 
+ font-size: $font-size-m; 
+}
+
+.type-container {
+ color: $tertiary-gray; 
+ font-size: 14px 
+}

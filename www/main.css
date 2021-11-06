@@ -1,0 +1,158 @@
+body {
+  background-color: #e0e0e0;
+}
+
+.selectize-input {
+  border-radius: 16px;
+}
+
+.selectize-input.input-active {
+  border-radius: 16px;
+}
+
+.seclectize-dropdown {
+  border-radius: 16px;
+}
+
+.selectize-dropdown-content {
+  border-radius: 16px;
+}
+
+.form-control {
+  border-radius: 16px;
+}
+
+.round-box {
+  background-color: white;
+  border-radius: 16px;
+  padding: 32px;
+  height: calc(70vh + 64px + 35px);
+}
+
+.pagination-control {
+  border: 0px;
+  outline: 0px !important;
+  font-size: 18px;
+  color: #667c8a;
+}
+
+.pagination-control:active {
+  color: #667c8a;
+}
+
+.pagination-control:focus {
+  background-color: transparent;
+  color: #667c8a;
+}
+
+.placeholder-icon {
+  font-weight: 500;
+  color: #667c8a;
+  font-size: 150px;
+}
+
+.placeholder-text {
+  font-weight: 700;
+  font-size: 18px;
+  padding-top: 12px;
+  color: #667c8a;
+}
+
+#pages_text {
+  color: #667c8a;
+  font-weight: 700;
+  margin-right: 24px;
+}
+
+.status-badge-dead, .status-badge-unknown, .status-badge-alive {
+  border-radius: 16px;
+  padding: 4px 12px;
+}
+
+.status-badge-alive {
+  background-color: #d8f5d6;
+  color: #2f532d;
+}
+
+.status-badge-unknown {
+  background-color: #d4daf7;
+  color: #2a366f;
+}
+
+.status-badge-dead {
+  background-color: #f7d4da;
+  color: #6f2a36;
+}
+
+.character-image {
+  height: 80px;
+  border-radius: 50%;
+}
+
+.character-image-column {
+  width: calc($character-image-size + $space-s);
+  max-width: calc($character-image-size + $space-s);
+}
+
+.character-table-header {
+  text-transform: uppercase;
+  color: #667c8a;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.table-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.gender-cell-content {
+  font-size: 16px;
+}
+
+.question-icon, .genderless-icon, .venus-icon, .mars-icon {
+  margin-right: 8px;
+}
+
+.mars-icon {
+  color: lightblue;
+}
+
+.venus-icon {
+  color: pink;
+}
+
+.genderless-icon {
+  color: gray;
+}
+
+.question-icon {
+  color: #ffb566;
+}
+
+.name-container {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.species-container {
+  color: #435d6b;
+  font-size: 16px;
+}
+
+.type-container {
+  color: #667c8a;
+  font-size: 14px;
+}

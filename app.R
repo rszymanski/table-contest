@@ -1,4 +1,5 @@
 library(shiny)
+library(sass)
 library(reactable)
 library(magrittr)
 
@@ -38,29 +39,18 @@ send_request <- function(page_number, filter_settings) {
 }
 
 create_status_badge <- function(status) {
-  color <- switch(
+  style_name <- switch(
     status,
-    Alive = "hsl(116, 60%, 90%)",
-    unknown = "hsl(230, 70%, 90%)",
-    Dead = "hsl(350, 70%, 90%)"
+    Alive = "alive",
+    unknown = "unknown",
+    Dead = "dead"
   )
   
-  text_color <- switch(
-    status,
-    Alive = "hsl(116, 30%, 25%)",
-    unknown = "hsl(230, 45%, 30%)",
-    Dead = "hsl(350, 45%, 30%)"
-  )
+  class_name <- glue::glue_safe("status-badge-{style_name}")
   
-  shiny::span(
-    status,
-    style = list(
-      background = color,
-      `border-radius` = "16px",
-      padding = "4px 14px",
-      color = text_color
-    )
-  ) %>% shiny::div()
+  shiny::div(
+    shiny::span(status, class = class_name)
+  )
 }
 
 create_character_table <- function(table_data) {
@@ -68,7 +58,7 @@ create_character_table <- function(table_data) {
     data = table_data,
     height = "70vh",
     defaultColDef = reactable::colDef(
-      headerStyle = list(`text-transform` = "uppercase", color = "hsl(203, 15%, 47%)")
+      headerClass = "character-table-header"
     ),
     sortable = FALSE,
     columns = list(
@@ -79,8 +69,7 @@ create_character_table <- function(table_data) {
           image <- img(
             src = value, 
             alt = value, 
-            height = "80px",
-            style = "border-radius: 50%"
+            class = "character-image"
           )
         }
       ),
@@ -89,15 +78,15 @@ create_character_table <- function(table_data) {
         cell = function(value, row_index) {
           shiny::div(
             shiny::div(
-              style = "font-weight: 700; font-size: 16px;",
+              class = "name-container",
               value
             ),
             shiny::div(
-              style = "color: hsl(201, 23%, 34%); font-size: 16px;",
+              class = "species-container",
               table_data[row_index, ]$species
             ),
             shiny::div(
-              style = "color: hsl(203, 15%, 47%); font-size: 14px",
+              class = "type-container",
               table_data[row_index, ]$type
             )
           )
@@ -116,17 +105,9 @@ create_character_table <- function(table_data) {
             unknown = "question"
           )
           
-          icon_color <- switch(
-            value,
-            Male = "lightblue",
-            Female = "pink",
-            Genderless = "gray",
-            unknown = "hsl(31, 100%, 70%)"
-          )
-          
           shiny::div(
-            style = list(`font-size` = "16px"),
-            shiny::icon(icon_name, style = list(color = icon_color, `margin-right` = "6px")),
+            class = "gender-cell-content",
+            shiny::icon(icon_name, class = glue::glue_safe("{icon_name}-icon")),
             value
           )
         }
@@ -140,77 +121,24 @@ create_character_table <- function(table_data) {
     ),
     pagination = FALSE,
     theme = reactable::reactableTheme(
-      cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
+      cellStyle = list(
+        display = "flex",
+        flexDirection = "column",
+        justifyContent = "center"
+      )
     )
   )
 }
 
+sass(
+  sass_file("styles/main.scss"),
+  output = "www/main.css"
+)
+
 ui <- shiny::fluidPage(
   shinyjs::useShinyjs(),
   shiny::tags$head(
-    shiny::tags$style("
-      body { background-color: hsl(210, 0%, 88%) }
-      
-      .selectize-input {
-        border-radius: 16px;
-      }
-      
-      .selectize-input.input-active {
-        border-radius: 16px;
-      }
-      
-      .seclectize-dropdown {
-        border-radius: 16px;
-      }
-      
-      .selectize-dropdown-content {
-        border-radius: 16px;
-      }
-      
-      .form-control {
-        border-radius: 16px;
-      }
-      
-      .round-box {
-        background-color: white;
-        border-radius: 16px;
-      }
-      
-      .pagination-control {
-        border: 0px;
-        outline: 0px!important;
-        font-size: 18px;
-        color: hsl(203, 15%, 47%);
-      }
-      
-      .pagination-control:active {
-        color: hsl(203, 15%, 47%);
-      }
-      
-      .pagination-control:focus {
-        background-color: transparent;
-        color: hsl(203, 15%, 47%);
-      }
-      
-      .placeholder-icon {
-        font-weight: 500;
-        color: hsl(203, 15%, 47%);
-        font-size: 150px;
-      }
-      
-      .placeholder-text {
-        font-weight: 700;
-        font-size: 18px;
-        padding-top: 12px;
-        color: hsl(203, 15%, 47%);
-      }
-      
-      #pages_text {
-        color: hsl(203, 15%, 47%);
-        font-weight: 600;
-        margin-right: 24px;
-      }
-    ")
+    shiny::tags$link(href = "main.css", rel = "stylesheet", type = "text/css")
   ),
   title = "Rick and Morty Characters Explorer",
   shiny::div(
@@ -218,18 +146,17 @@ ui <- shiny::fluidPage(
     shiny::div(
       style = "width: 984px; padding: 12px",
       shiny::div(
-        style = "display: flex; justify-content: space-around",
+        class = "filters-container",
         shiny::textInput(inputId = "name_filter", label = "Name"),
         shiny::selectInput(inputId = "gender_filter", label = "Gender", choices = c("", "female", "male", "genderless", "unknown")),
         shiny::selectInput(inputId = "status_filter", label = "Status", choices = c("", "alive", "dead", "unknown"))
       ),
       shiny::div(
         class = "round-box",
-        style = "padding: 32px; height: calc(70vh + 64px + 35px)",
         shinyjs::hidden(
           shiny::div(
             id = "table_placeholder",
-            style = "display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%",
+            class = "table-placeholder",
             shiny::icon("question-circle", class = "placeholder-icon"),
             shiny::div(
               "Oops, looks like there is no character matching your search criteria",
@@ -240,7 +167,7 @@ ui <- shiny::fluidPage(
         shiny::div(
           id = "table_container",
           shiny::div(
-            style = "display: flex; justify-content: flex-end; align-items: center",
+            class = "pagination-container",
             shiny::textOutput("pages_text", inline = TRUE),
             shiny::actionButton("goto_first_page", class = "pagination-control", label = "", icon = shiny::icon("angle-double-left")),
             shiny::actionButton("prev_page", class = "pagination-control", label = "", icon = shiny::icon("angle-left")),
