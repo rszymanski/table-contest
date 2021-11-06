@@ -44,9 +44,10 @@ ui <- shiny::fluidPage(
 )
 
 server <- function(input, output, session) {
-  character_data_fetcher <- CharacterDataFetcherInMemoryImpl$new(
+  character_data_fetcher <- CharacterDataFetcherFactory$new(
     api_url = "https://rickandmortyapi.com/api/character"
-  )
+  )$create("paginated")
+  
   page_number <- shiny::reactiveVal(1)
   
   filter_settings <- mod_filters_server(id = "character_table_filters")
@@ -70,7 +71,7 @@ server <- function(input, output, session) {
 
     character_data_fetcher$fetch_page(
       page_number = page_number(),
-      filter_settings = list(gender = "female")
+      filter_settings = filter_settings()
     )
   })
 
