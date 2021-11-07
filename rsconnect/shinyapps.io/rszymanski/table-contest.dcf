@@ -1,0 +1,14 @@
+name: table-contest
+title: table-contest
+username:
+account: rszymanski
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5059054
+bundleId: 5221353
+url: https://rszymanski.shinyapps.io/table-contest/
+when: 1636214828.7692
+lastSyncTime: 1636214828.76921
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile
